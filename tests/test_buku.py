@@ -19,3 +19,36 @@ def test_create_buku_berhasil():
     mock_cursor.execute.assert_called_once()
     # Memverifikasi apakah perintah commit (simpan) dipanggil
     model.conn.commit.assert_called_once()
+
+def test_update_buku_berhasil():
+    model = BukuModel()
+    model.conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.rowcount = 1
+    model.conn.cursor.return_value = mock_cursor
+
+    hasil = model.update_buku(1, "Buku Baru", "Penulis Baru", 2026)
+
+    assert hasil is True
+    mock_cursor.execute.assert_called_once_with(
+        "\n                UPDATE buku\n"
+        "                SET judul = ?, penulis = ?, tahun_terbit = ?\n"
+        "                WHERE id_buku = ?\n            ",
+        ("Buku Baru", "Penulis Baru", 2026, 1),
+    )
+    model.conn.commit.assert_called_once()
+
+def test_delete_buku_berhasil():
+    model = BukuModel()
+    model.conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.rowcount = 1
+    model.conn.cursor.return_value = mock_cursor
+
+    hasil = model.delete_buku(1)
+
+    assert hasil is True
+    mock_cursor.execute.assert_called_once_with(
+        "DELETE FROM buku WHERE id_buku = ?", (1,)
+    )
+    model.conn.commit.assert_called_once()
