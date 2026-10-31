@@ -21,8 +21,12 @@ class BukuController:
         # Hanya admin yang dapat mengubah koleksi buku.
         if self.user_role != "admin":
             self.view.btn_simpan.configure(state="disabled", text="Akses Terkunci (Khusus Admin)")
-            self.view.btn_update.configure(state="disabled")
-            self.view.btn_delete.configure(state="disabled")
+            self.view.btn_update.configure(
+                state="disabled", text="Perbarui Data (Khusus Admin)"
+            )
+            self.view.btn_delete.configure(
+                state="disabled", text="Hapus Data (Khusus Admin)"
+            )
             self.view.entry_judul.configure(state="disabled")
             self.view.entry_penulis.configure(state="disabled")
             self.view.entry_tahun.configure(state="disabled")

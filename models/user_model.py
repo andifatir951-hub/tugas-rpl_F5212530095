@@ -25,30 +25,24 @@ class UserModel:
                 role TEXT NOT NULL
             )
         """)
+        cursor.executemany(
+            "INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)",
+            (
+                ("petugas", self.hash_password("admin123"), "admin"),
+                ("mahasiswa", self.hash_password("user123"), "anggota"),
+            ),
+        )
         self.conn.commit()
 
-    def belum_ada_pengguna(self):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute("SELECT 1 FROM users LIMIT 1")
-            return cursor.fetchone() is None
-        finally:
-            cursor.close()
-
-    def buat_admin_pertama(self, username, password):
-        if not username or not password:
-            return False
-
+    def register_user(self, username, password, role):
         cursor = self.conn.cursor()
         try:
             cursor.execute(
-                "INSERT INTO users (username, password, role) "
-                "SELECT ?, ?, 'admin' WHERE NOT EXISTS "
-                "(SELECT 1 FROM users)",
-                (username, self.hash_password(password)),
+                "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+                (username, self.hash_password(password), role),
             )
             self.conn.commit()
-            return cursor.rowcount == 1
+            return True
         finally:
             cursor.close()
 

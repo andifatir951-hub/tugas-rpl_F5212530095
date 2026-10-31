@@ -1,5 +1,30 @@
 from unittest.mock import MagicMock
+from controllers import buku_controller
+from controllers.buku_controller import BukuController
 from models.buku_model import BukuModel
+
+
+def test_anggota_ditolak_saat_memperbarui_buku(monkeypatch):
+    controller = BukuController.__new__(BukuController)
+    controller.user_role = "anggota"
+    showerror = MagicMock()
+    monkeypatch.setattr(buku_controller.messagebox, "showerror", showerror)
+
+    controller.perbarui_data()
+
+    showerror.assert_called_once()
+
+
+def test_anggota_ditolak_saat_menghapus_buku(monkeypatch):
+    controller = BukuController.__new__(BukuController)
+    controller.user_role = "anggota"
+    showerror = MagicMock()
+    monkeypatch.setattr(buku_controller.messagebox, "showerror", showerror)
+
+    controller.hapus_data()
+
+    showerror.assert_called_once()
+
 
 def test_create_buku_berhasil():
     # Menginisialisasi Model
