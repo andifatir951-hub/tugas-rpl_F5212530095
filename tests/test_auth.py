@@ -1,5 +1,23 @@
 from unittest.mock import MagicMock
+
+from controllers.auth_controller import AuthController
 from models.user_model import UserModel
+
+
+def test_login_berhasil_mengembalikan_role_dan_menutup_tampilan():
+    controller = AuthController.__new__(AuthController)
+    controller.model = MagicMock()
+    controller.view = MagicMock()
+    controller.role = None
+    controller.run_application = False
+
+    controller.buka_aplikasi("anggota")
+
+    assert controller.role == "anggota"
+    controller.model.close.assert_called_once()
+    controller.view.quit.assert_called_once()
+    controller.view.destroy.assert_called_once()
+
 
 def test_hash_password_konsisten():
     password_asli = "admin123"

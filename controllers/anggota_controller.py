@@ -11,6 +11,7 @@ class AnggotaController:
         self.view.btn_simpan.configure(command=self.simpan_data)
         self.view.btn_update.configure(command=self.perbarui_data)
         self.view.btn_delete.configure(command=self.hapus_data)
+        self.view.btn_logout.configure(command=self.logout)
         self.view.tabel.bind("<<TreeviewSelect>>", self.pilih_data)
         self.view.protocol("WM_DELETE_WINDOW", self.tutup)
         self.id_anggota_terpilih = None
@@ -148,6 +149,12 @@ class AnggotaController:
     def tutup(self):
         self.model.close()
         self.view.destroy()
+
+    def logout(self):
+        from controllers.auth_controller import AuthController
+
+        self.tutup()
+        AuthController().run()
 
     def run(self):
         self.view.mainloop()

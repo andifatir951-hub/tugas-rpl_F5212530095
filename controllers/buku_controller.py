@@ -8,14 +8,17 @@ class BukuController:
         self.model = BukuModel()
         self.view = BukuView()
         self.id_buku_terpilih = None
+        self.logout_requested = False
 
         # Menampilkan informasi role pada judul jendela aplikasi
         self.view.title(f"Sistem Manajemen Perpustakaan - Mode: {self.user_role.upper()}")
+        self.view.protocol("WM_DELETE_WINDOW", self.tutup)
 
         # Binding tombol aksi
         self.view.btn_simpan.configure(command=self.simpan_data)
         self.view.btn_update.configure(command=self.perbarui_data)
         self.view.btn_delete.configure(command=self.hapus_data)
+        self.view.btn_logout.configure(command=self.logout)
         self.view.tabel.bind("<<TreeviewSelect>>", self.pilih_data)
 
         # Hanya admin yang dapat mengubah koleksi buku.
@@ -123,5 +126,15 @@ class BukuController:
         else:
             messagebox.showerror("Error", "Gagal menghapus data.")
 
+    def logout(self):
+        self.logout_requested = True
+        self.tutup()
+
+    def tutup(self):
+        self.model.close()
+        self.view.quit()
+        self.view.destroy()
+
     def run(self):
         self.view.mainloop()
+        return self.logout_requested

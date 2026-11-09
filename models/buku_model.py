@@ -68,3 +68,6 @@ class BukuModel:
         except Exception as e:
             print(f"Error saat menghapus: {e}")
             return False
+
+    def close(self):
+        self.conn.close()

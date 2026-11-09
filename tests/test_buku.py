@@ -26,6 +26,20 @@ def test_anggota_ditolak_saat_menghapus_buku(monkeypatch):
     showerror.assert_called_once()
 
 
+def test_logout_menutup_aplikasi_dan_meminta_login_ulang():
+    controller = BukuController.__new__(BukuController)
+    controller.model = MagicMock()
+    controller.view = MagicMock()
+    controller.logout_requested = False
+
+    controller.logout()
+
+    assert controller.logout_requested is True
+    controller.model.close.assert_called_once()
+    controller.view.quit.assert_called_once()
+    controller.view.destroy.assert_called_once()
+
+
 def test_create_buku_berhasil():
     # Menginisialisasi Model
     model = BukuModel()
@@ -77,3 +91,12 @@ def test_delete_buku_berhasil():
         "DELETE FROM buku WHERE id_buku = ?", (1,)
     )
     model.conn.commit.assert_called_once()
+
+
+def test_close_menutup_koneksi_database():
+    model = BukuModel()
+    model.conn = MagicMock()
+
+    model.close()
+
+    model.conn.close.assert_called_once()

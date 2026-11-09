@@ -54,6 +54,13 @@ class AnggotaView(ctk.CTk):
         )
         self.btn_delete.grid(row=5, column=0, padx=15, pady=(5, 15), sticky="ew")
 
+        self.btn_logout = ctk.CTkButton(
+            form,
+            text="Logout",
+            fg_color="gray",
+        )
+        self.btn_logout.grid(row=6, column=0, padx=15, pady=(5, 15), sticky="ew")
+
         daftar = ctk.CTkFrame(self)
         daftar.grid(row=1, column=0, padx=15, pady=(0, 15), sticky="nsew")
         daftar.grid_columnconfigure(0, weight=1)
